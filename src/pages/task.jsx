@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import Header from "../component/header";
 import {
   addTask,
   deleteTask,
@@ -18,6 +17,7 @@ import {
 } from "@mui/material";
 import response from "../Utils/response";
 import Loader from "../component/loader";
+import { Add, Delete } from "@mui/icons-material";
 
 export default function Task() {
   const [open, setOpen] = React.useState(false);
@@ -101,7 +101,7 @@ export default function Task() {
 
   useEffect(() => {
     getAll(page);
-  }, []);
+  }, [page]);
 
   const handleDescription = (data) => {
     setDescription(data);
@@ -132,7 +132,7 @@ export default function Task() {
 
   const handlePageChange = (event,newPage) => {
     setPage(newPage)
-    getAll()
+
   };
   return (
     <div>
@@ -147,6 +147,7 @@ export default function Task() {
                 setOpen((prev) => !prev);
               }}
             >
+              <Add/>
               Add
             </button>
           </div>
@@ -160,7 +161,7 @@ export default function Task() {
         </>
       ) : (
         <>
-          <table class="table">
+          <table className="table container">
             <thead>
               <tr>
                 <th scope="col">Task</th>
@@ -182,17 +183,25 @@ export default function Task() {
                       }}
                     />
                   </td>
-                  <td>
+                  <td className="p-2">
+                    <span>
                     <Button
-                      variant="error"
+                         sx={{ marginRight: 2 }}
+                       variant="contained"
+                       color="error"
+                       endIcon={<Delete />}
                       onClick={(e) => {
                         taskDelete(d._id);
                       }}
                     >
                       Delete
                     </Button>
-                    <Button
-                      variant="primary"
+                    </span>
+                   
+                    <Button 
+                    className="ml-4"
+                      variant="contained"
+                      endIcon={<EditIcon />}
                       onClick={(e) => {
                         openUpdateHandler(d._id,d.title,d.description);
                       }}
@@ -207,16 +216,16 @@ export default function Task() {
         </>
       )}
 
-<Pagination count={Math.ceil(total/limit)}  page={page}  onChange={handlePageChange} />
-
-
+<Pagination count={Math.ceil(total/limit)} color="primary"  page={page}  onChange={handlePageChange} />
       <Modal
         open={open}
         onClose={handleClose}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
+        
         <Box sx={style}>
+          <h3>Add Task</h3>
           <input
             class="form-control"
             type="text"
@@ -245,6 +254,7 @@ export default function Task() {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
+          <h3>Edit Task</h3>
           <input
             class="form-control"
             type="text"
